@@ -1,0 +1,25 @@
+sudo: required
+language: node_js
+node_js:
+  - 12
+
+services:
+  - docker
+
+install:
+  - npm install
+
+script: 
+  - docker build -t friday-chatbot .
+
+deploy:
+  provider : script
+  cleanup: false
+  script:
+    docker login -u $DOCKER_USER -p $DOCKER_PASSWORD;
+    docker tag friday-chatbot $DOCKER_USER/friday-chatbot:$TRAVIS_BUILD_NUMBER;
+    docker push $DOCKER_USER/friday-chatbot:$TRAVIS_BUILD_NUMBER;
+    docker tag friday-chatbot $DOCKER_USER/friday-chatbot:latest;
+    docker push $DOCKER_USER/friday-chatbot:latest;
+  on:
+    branch: master
