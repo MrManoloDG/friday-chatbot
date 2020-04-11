@@ -1,0 +1,27 @@
+sudo: required
+language: node_js
+node_js:
+  - 12
+
+services:
+  - docker
+  - mongodb
+
+
+install:
+  - npm install
+
+before_script:
+  - docker login
+
+script: 
+  - docker build -t mrmanolodg/friday-chatbot .
+
+deploy:
+  provider : script
+  cleanup: false
+  script:
+    docker login;
+    docker push mrmanolodg/friday-chatbot;
+  on:
+    branch: master
