@@ -1,3 +1,4 @@
 tfm.pem
 TFM.code-workspace
 .*
+server.csr

@@ -12,7 +12,6 @@ const {
   const app = dialogflow()
   
   // Register handlers for Dialogflow intents
-  
   app.intent('Default Welcome Intent', conv => {
     conv.ask('Hi, how is it going?')
     conv.ask(`Here's a picture of a cat`)
@@ -31,6 +30,11 @@ const {
     conv.ask(`I didn't understand. Can you tell me something else?`)
   })
 
-  console.log("Starting WebHook server at "+port);
   expressApp.post('/fulfillment', app)
-  expressApp.listen(port)
+
+  https.createServer({
+    key: fs.readFileSync('server.key'),
+    cert: fs.readFileSync('server.crt')
+}, expressApp).listen(port, function(){
+    console.log("My https server listening on port " + port + "...");
+});
