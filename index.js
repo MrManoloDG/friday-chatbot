@@ -2,6 +2,8 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const port = process.env.PORT || 8080;
 const expressApp = express().use(bodyParser.json())
+const fs = require('fs');
+const https = require('https');
 const {
     dialogflow,
     Image,
