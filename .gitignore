@@ -2,4 +2,4 @@ tfm.pem
 TFM.code-workspace
 .env
 /node_modules
-server.*
+server.csr
