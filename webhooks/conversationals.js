@@ -1,6 +1,6 @@
 
 module.exports = function(app){
-    const types = require('./services/types.service'); 
+    const types = require('../services/types.service'); 
     const AppContexts = {
         OVERTIME: 'OverTime',
         NO_OVERTIME: 'NoOverTime'
