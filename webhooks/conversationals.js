@@ -17,6 +17,7 @@ module.exports = function(app){
           } else {
             conv.contexts.set(AppContexts.NO_OVERTIME,5);
           }
+          conv.ask('¿Que tipo de relación?');
         });
     })
 }
