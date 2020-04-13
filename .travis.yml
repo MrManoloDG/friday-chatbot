@@ -6,6 +6,9 @@ node_js:
 services:
   - docker
 
+before_install:
+  - wget -qO- https://toolbelt.heroku.com/install.sh | sh
+
 install:
   - npm install
 
@@ -21,5 +24,8 @@ deploy:
     docker push $DOCKER_USER/friday-chatbot:$TRAVIS_BUILD_NUMBER;
     docker tag friday-chatbot $DOCKER_USER/friday-chatbot:latest;
     docker push $DOCKER_USER/friday-chatbot:latest;
+    heroku container:login;
+    heroku container:push web -a fridaywebhook;
+    heroku container:release web -a fridaywebhook;
   on:
     branch: master

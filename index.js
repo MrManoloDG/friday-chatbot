@@ -26,21 +26,7 @@ expressApp.get('/test', (req,res) => {
   });
   
 });
-expressApp.listen(port);
 */
+console.log("Server listening in port: " + port);
+expressApp.listen(port);
 
-
-require("greenlock-express")
-  .init({
-      packageRoot: __dirname,
-      configDir: "./greenlock.d",
-
-      // contact for security and critical bug notices
-      maintainerEmail: "mandiagil@alum.us.es",
-
-      // whether or not to run at cloudscale
-      cluster: false
-  })
-  // Serves on 80 and 443
-  // Get's SSL certificates magically!
-  .serve(expressApp);
