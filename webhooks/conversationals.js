@@ -10,7 +10,7 @@ module.exports = function(app){
       }
 
     app.intent('Decision Model - Relationship', conv => {
-        fetch(elastic_url + 'covid_canada',{
+        return fetch(elastic_url + 'covid_canada',{
             method: 'GET',
         }).then(response => {
             return response.json();
