@@ -2,7 +2,7 @@
 const request = require('request');
 const elastic_url = process.env.ELASTIC_URL || 'http://fridaywebhook.duckdns.org:9200/';
 
-module.exports = function(app){
+module.exports = async function(app){
     const types = require('../services/types.service'); 
     const AppContexts = {
         OVERTIME: 'OverTime',
