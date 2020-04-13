@@ -1,39 +1,36 @@
 const express = require('express')
 const bodyParser = require('body-parser')
+require('dotenv').config();
 const port = process.env.PORT || 8080;
 const expressApp = express().use(bodyParser.json())
-const fs = require('fs');
-const https = require('https');
+const setConversationalIntents = require('./webhooks/conversationals');
 const {
     dialogflow,
     Image,
   } = require('actions-on-google')
   
+const elastic_url = process.env.ELASTIC_URL || 'http://elasticsearch:9200/';
 
 // Create an app instance
 const app = dialogflow()
 
-// Register handlers for Dialogflow intents
-app.intent('Default Welcome Intent', conv => {
-  conv.ask('Hi, how is it going?')
-  conv.ask(`Here's a picture of a cat`)
-  conv.ask(new Image({
-    url: 'https://developers.google.com/web/fundamentals/accessibility/semantics-builtin/imgs/160204193356-01-cat-500.jpg',
-    alt: 'A cat',
-  }))
-})
-
-// Intent in Dialogflow called `Goodbye`
-app.intent('Goodbye', conv => {
-  conv.close('See you later!')
-})
-
-app.intent('Default Fallback Intent', conv => {
-  conv.ask(`I didn't understand. Can you tell me something else?`)
-})
+setConversationalIntents(app);
 
 expressApp.post('/fulfillment', app)
 expressApp.get('/', (req,res) => {res.send("working...")});
+
+
+/*
+expressApp.get('/test', (req,res) => {
+  request(elastic_url + 'covid_canada',{json: true}, function(err,res,body) {
+    //console.log(body.covid_canada.mappings.properties) // 200
+    console.log(check_date(body.covid_canada.mappings.properties));
+  });
+  
+});
+expressApp.listen(port);
+*/
+
 
 require("greenlock-express")
   .init({
