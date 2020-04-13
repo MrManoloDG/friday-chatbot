@@ -8,8 +8,6 @@ const {
     dialogflow,
     Image,
   } = require('actions-on-google')
-  
-const elastic_url = process.env.ELASTIC_URL || 'http://elasticsearch:9200/';
 
 // Create an app instance
 const app = dialogflow()

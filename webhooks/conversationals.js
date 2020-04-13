@@ -1,5 +1,6 @@
 
 const request = require('request');
+const elastic_url = process.env.ELASTIC_URL || 'http://elasticsearch:9200/';
 
 module.exports = function(app){
     const types = require('../services/types.service'); 
