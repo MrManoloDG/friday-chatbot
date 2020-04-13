@@ -16,10 +16,30 @@ const types = require('./services/types.service');
 // Create an app instance
 const app = dialogflow()
 
-setConversationalIntents(app);
+//setConversationalIntents(app);
+const AppContexts = {
+  OVERTIME: 'OverTime',
+  NO_OVERTIME: 'NoOverTime'
+}
+
+app.intent('Decision Model - Relationship', conv => {
+  return request(elastic_url + 'covid_canada',{json: true}, function(err,res,body) {
+    console.log(body.covid_canada.mappings.properties) // 200
+    types.check_date(body.covid_canada.mappings.properties).then((res,err) => {
+      if(res) {
+          conv.contexts.set(AppContexts.OVERTIME,5);
+        } else {
+          conv.contexts.set(AppContexts.NO_OVERTIME,5);
+        }
+        conv.ask('¿Que tipo de relación?');
+    });
+  });
+})
+
 
 expressApp.post('/fulfillment', app)
 expressApp.get('/', (req,res) => {res.send("working...")});
+
 
 
 /*
