@@ -6,17 +6,18 @@ module.exports = function(app){
     const types = require('../services/types.service'); 
     const AppContexts = {
         OVERTIME: 'OverTime',
-        NO_OVERTIME: 'NoOverTime'
+        NO_OVERTIME: 'NoOverTime',
+        BULLET_GRAPH: 'Bullet_Graph'
       }
 
+    // This intent check the type date in the data for enable Overtime conversations
+    // TODO: Check geo for geolocation conversation (the intent have to been enabled)
     app.intent('Decision Model - Relationship', conv => {
         return fetch(elastic_url + 'covid_canada',{
             method: 'GET',
         }).then(response => {
             return response.json();
-        }).then(body => {
-          console.log(body.covid_canada.mappings.properties) // 200
-          
+        }).then(body => {   
           types.check_date(body.covid_canada.mappings.properties).then((res,err) => {
             if(res) {
                 conv.contexts.set(AppContexts.OVERTIME,5);
@@ -28,4 +29,26 @@ module.exports = function(app){
           
         });
     })
+
+    // This intent check how many values have our dataset for end the conversation
+    app.intent('Decision Model', conv => {
+      console.log("llegado");
+      return fetch(elastic_url + 'covid_canada',{
+          method: 'GET',
+      }).then(response => {
+          return response.json();
+      }).then(body => {    
+        types.check_length_many(body.covid_canada.mappings.properties).then((res,err) => {
+          if(res) {
+            //Dialog to more than 1 set of values
+            conv.ask("Claro,  ¿Cuál sería el propósito?");
+          } else {
+            //Dialog to 1 set of value
+            conv.contexts.set(AppContexts.BULLET_GRAPH,5);
+            conv.ask("Veo que solo tienes un atributo, deberias de usar un grafico de bala");
+          }
+        });
+        
+      });
+  })
 }
