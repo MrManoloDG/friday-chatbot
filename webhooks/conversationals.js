@@ -50,5 +50,14 @@ module.exports = function(app){
         });
         
       });
-  })
+    })
+
+    // This intent check how many values have our dataset for end the conversation
+    app.intent('Decision Model - Relationship - Correlation - N Categories', conv => {
+      if (conv.parameters.number > 2) {
+        conv.ask("Estaría bien usar varios gráficos de dispersión.");
+      } else {
+        conv.ask("Estaría bien usar un gráfico de dispersión.");
+      }
+    })
 }
