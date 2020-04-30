@@ -13,6 +13,7 @@ install:
   - npm install
 
 script: 
+  - npm test
   - docker build -t friday-chatbot .
 
 deploy:
