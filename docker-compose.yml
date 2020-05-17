@@ -13,13 +13,6 @@ services:
     ports:
       - 9200:9200
       - 9300:9300
-    entrypoint:
-      - elasticsearch
-      - -Ehttp.port=9200
-      - -Ehttp.cors.enabled=true
-      - -Ehttp.cors.allow-origin=xxx
-      - -Ehttp.cors.allow-headers=Content-Type,Content-Length,Authorization
-      - -Ehttp.cors.allow-credentials=true
 
   kibana:
     image: docker.elastic.co/kibana/kibana:7.6.1
