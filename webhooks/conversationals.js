@@ -13,12 +13,14 @@ module.exports = function(app){
     // This intent check the type date in the data for enable Overtime conversations
     // TODO: Check geo for geolocation conversation (the intent have to been enabled)
     app.intent('Decision Model - Relationship', conv => {
+        console.log('Decision Model - Relationship');
         return fetch(elastic_url + 'covid_canada',{
             method: 'GET',
         }).then(response => {
             return response.json();
         }).then(body => {   
           types.check_date(body.covid_canada.mappings.properties).then((res,err) => {
+            console.log(res);
             if(res) {
                 conv.contexts.set(AppContexts.OVERTIME,5);
               } else {
@@ -28,7 +30,7 @@ module.exports = function(app){
           });
           
         });
-    })
+    });
 
     // This intent check how many values have our dataset for end the conversation
     app.intent('Decision Model', conv => {
@@ -50,7 +52,7 @@ module.exports = function(app){
         });
         
       });
-    })
+    });
 
     // This intent check how many values have our dataset for end the conversation
     app.intent('Decision Model - Relationship - Correlation - N Categories', conv => {
@@ -59,5 +61,18 @@ module.exports = function(app){
       } else {
         conv.ask("Estaría bien usar un gráfico de dispersión.");
       }
-    })
+    });
+
+    // Intents for draw
+
+    // HISTOGRAM
+    app.intent('histogram - colname', conv => {
+      console.log(conv.parameters.any);
+      let json = {
+        resp: "Vale, voy a dibujarlo",
+        graph: "histogram",
+        colname: conv.parameters.any
+      }
+      conv.ask(JSON.stringify(json));
+    });
 }
