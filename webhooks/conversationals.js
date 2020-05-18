@@ -75,4 +75,14 @@ module.exports = function(app){
       }
       conv.ask(JSON.stringify(json));
     });
+
+    app.intent('frequency_polygon - colname', conv => {
+      console.log(conv.parameters.any);
+      let json = {
+        resp: "Vale, voy a dibujarlo",
+        graph: "frequency_polygon",
+        colname: conv.parameters.any
+      }
+      conv.ask(JSON.stringify(json));
+    });
 }
