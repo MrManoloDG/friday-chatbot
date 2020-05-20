@@ -71,7 +71,8 @@ module.exports = function(app){
       let json = {
         resp: "Vale, voy a dibujarlo",
         graph: "histogram",
-        colname: conv.parameters.any
+        colname: conv.parameters.any,
+        parameters: conv.parameters
       }
       conv.ask(JSON.stringify(json));
     });
@@ -81,7 +82,19 @@ module.exports = function(app){
       let json = {
         resp: "Vale, voy a dibujarlo",
         graph: "frequency_polygon",
-        colname: conv.parameters.any
+        colname: conv.parameters.any,
+        parameters: conv.parameters
+      }
+      conv.ask(JSON.stringify(json));
+    });
+
+    app.intent('Bullet_Graph - colname - target', conv => {
+      console.log(conv.parameters);
+      let json = {
+        resp: "Vale, voy a dibujarlo",
+        graph: "bullet_graph",
+        colname: conv.parameters.any,
+        parameters: conv.parameters
       }
       conv.ask(JSON.stringify(json));
     });
