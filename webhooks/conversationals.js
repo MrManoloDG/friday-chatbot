@@ -7,7 +7,8 @@ module.exports = function(app){
     const AppContexts = {
         OVERTIME: 'OverTime',
         NO_OVERTIME: 'NoOverTime',
-        BULLET_GRAPH: 'Bullet_Graph'
+        BULLET_GRAPH: 'Bullet_Graph',
+        SCATTER_PLOT: 'Scatter_Plot'
       }
 
     // This intent check the type date in the data for enable Overtime conversations
@@ -60,6 +61,7 @@ module.exports = function(app){
         conv.ask("Estaría bien usar varios gráficos de dispersión.");
       } else {
         conv.ask("Estaría bien usar un gráfico de dispersión.");
+        conv.contexts.set(AppContexts.SCATTER_PLOT,5);
       }
     });
 
@@ -93,6 +95,28 @@ module.exports = function(app){
       let json = {
         resp: "Vale, voy a dibujarlo",
         graph: "bullet_graph",
+        colname: conv.parameters.any,
+        parameters: conv.parameters
+      }
+      conv.ask(JSON.stringify(json));
+    });
+
+    app.intent('Scatter_Plot - colnames', conv => {
+      console.log(conv.parameters);
+      let json = {
+        resp: "Vale, voy a dibujarlo",
+        graph: "scatter_plot",
+        colname: [conv.parameters.att1,conv.parameters.att2],
+        parameters: conv.parameters
+      }
+      conv.ask(JSON.stringify(json));
+    });
+
+    app.intent('box_plot - time_interval', conv => {
+      console.log(conv.parameters);
+      let json = {
+        resp: "Vale, voy a dibujarlo",
+        graph: "box_plot",
         colname: conv.parameters.any,
         parameters: conv.parameters
       }
