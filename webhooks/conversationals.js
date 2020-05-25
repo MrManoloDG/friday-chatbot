@@ -113,13 +113,61 @@ module.exports = function(app){
     });
 
     app.intent('box_plot - time_interval', conv => {
+      return fetch(elastic_url + 'covid_canada',{
+          method: 'GET',
+      }).then(response => {
+          return response.json();
+      }).then(body => {    
+        types.check_date_field(body.covid_canada.mappings.properties, conv.parameters.timeField).then((res,err) => {
+          if(res) {
+            console.log(conv.parameters);
+            let json = {
+              resp: "Vale, voy a dibujarlo",
+              graph: "box_plot",
+              colname: conv.parameters.any,
+              parameters: conv.parameters
+            }
+            conv.ask(JSON.stringify(json));
+          } else {
+            let json = {
+              resp: "No encuentro ese atributo de tiempo, si puedes volver a repetirmelo...",
+              graph: "box_plot",
+              colname: conv.parameters.any,
+              parameters: conv.parameters
+            }
+            conv.ask(JSON.stringify(json));
+          }
+        });
+      });
+    });
+
+    app.intent('Slope_Graph - IntervalTime', conv => {
       console.log(conv.parameters);
-      let json = {
-        resp: "Vale, voy a dibujarlo",
-        graph: "box_plot",
-        colname: conv.parameters.any,
-        parameters: conv.parameters
-      }
-      conv.ask(JSON.stringify(json));
+      return fetch(elastic_url + 'covid_canada',{
+          method: 'GET',
+      }).then(response => {
+          return response.json();
+      }).then(body => {    
+        types.check_date_field(body.covid_canada.mappings.properties, conv.parameters.timeField).then((res,err) => {
+          if(res) {
+            console.log(conv.parameters);
+            let json = {
+              resp: "Vale, voy a dibujarlo",
+              graph: "slope_graph",
+              colname: conv.parameters.any,
+              parameters: conv.parameters
+            }
+            conv.ask(JSON.stringify(json));
+          } else {
+            let json = {
+              resp: "No encuentro ese atributo de tiempo, si puedes volver a repetirmelo...",
+              graph: "slope_graph",
+              colname: conv.parameters.any,
+              parameters: conv.parameters
+            }
+            conv.ask(JSON.stringify(json));
+          }
+        });
+      });
     });
 }

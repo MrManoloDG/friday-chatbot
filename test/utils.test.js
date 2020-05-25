@@ -55,5 +55,31 @@ describe("Utils tests", () => {
             return expect(types.check_length_many(fields)).resolves.toBe(false);
         });
     });
+
+    describe("Date Field contain test", () => {
+        it("Test check_date_field must be true", () =>{
+            const fields = {
+                date_test: {
+                    type: 'date'
+                },
+                name: {
+                    type: 'string'
+                }
+            };
+            return expect(types.check_date_field(fields,'date_test')).resolves.toBe(true);
+        });
+
+        it("Test check_date_field must be false", () =>{
+            const fields = {
+                '@timestamp': {
+                    type: 'string'
+                },
+                date_test: {
+                    type: 'string'
+                }
+            };
+            return expect(types.check_date_field(fields,'date_test')).resolves.toBe(false);
+        });
+    });
     
 });

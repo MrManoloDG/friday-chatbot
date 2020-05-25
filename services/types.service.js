@@ -20,3 +20,9 @@ exports.check_length_many = function(fields){
         resolve((check > 1));
     });
 }
+
+exports.check_date_field = function(fields, timeField){
+    return new Promise((resolve,reject) => {
+        resolve((fields[timeField] !== undefined && fields[timeField] != null && fields[timeField].type == 'date'));
+    });
+}
