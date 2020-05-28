@@ -26,3 +26,9 @@ exports.check_date_field = function(fields, timeField){
         resolve((fields[timeField] !== undefined && fields[timeField] != null && fields[timeField].type == 'date'));
     });
 }
+
+exports.check_field = function(fields, field) {
+    return new Promise((resolve,reject) => {
+        resolve((fields[field] !== undefined && fields[field] != null));
+    });
+}

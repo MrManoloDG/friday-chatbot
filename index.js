@@ -11,6 +11,7 @@ const elastic_url = process.env.ELASTIC_URL || 'http://fridaywebhook.duckdns.org
 const setConversationalIntents = require('./webhooks/conversationals');
 const {
     dialogflow,
+    actionssdk,
     Image,
   } = require('actions-on-google')
 
@@ -18,8 +19,9 @@ const types = require('./services/types.service');
 
 // Create an app instance
 const app = dialogflow()
+const app_sdk = actionssdk();
 
-setConversationalIntents(app);
+setConversationalIntents(app, app_sdk);
 
 expressApp.post('/fulfillment', app)
 expressApp.get('/', (req,res) => {res.send('<iframe allow="microphone;" width="350" height="430" src="https://console.dialogflow.com/api-client/demo/embedded/faf41e9c-6271-42be-bb9f-141008d52e33"> </iframe>')});

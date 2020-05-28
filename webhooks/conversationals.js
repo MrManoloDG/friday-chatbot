@@ -2,7 +2,7 @@
 const fetch = require('node-fetch');
 const elastic_url = process.env.ELASTIC_URL || 'http://fridaywebhook.duckdns.org:9200/';
 
-module.exports = function(app){
+module.exports = function(app, app_sdk){
     const types = require('../services/types.service'); 
     const AppContexts = {
         OVERTIME: 'OverTime',
@@ -90,7 +90,7 @@ module.exports = function(app){
       conv.ask(JSON.stringify(json));
     });
 
-    app.intent('Bullet_Graph - colname - target', conv => {
+    app.intent('Bullet_Graph - colname - groupField', conv => {
       console.log(conv.parameters);
       let json = {
         resp: "Vale, voy a dibujarlo",
