@@ -141,7 +141,7 @@ module.exports = function(app, app_sdk){
       });
     });
 
-    app.intent('Slope_Graph - IntervalTime', conv => {
+    app.intent('Slope_Graph - timeField', conv => {
       console.log(conv.parameters);
       return fetch(elastic_url + 'covid_canada',{
           method: 'GET',
