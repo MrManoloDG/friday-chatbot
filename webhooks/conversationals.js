@@ -112,7 +112,7 @@ module.exports = function(app, app_sdk){
       conv.ask(JSON.stringify(json));
     });
 
-    app.intent('box_plot - time_interval', conv => {
+    app.intent('box_plot - TimeField', conv => {
       return fetch(elastic_url + 'covid_canada',{
           method: 'GET',
       }).then(response => {
