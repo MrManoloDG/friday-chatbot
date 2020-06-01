@@ -5,6 +5,7 @@ const elastic_url = process.env.ELASTIC_URL || 'http://fridaywebhook.duckdns.org
 module.exports = function(app, app_sdk){
     const types = require('../services/types.service'); 
     const AppContexts = {
+        PARAMS: 'Fields',
         OVERTIME: 'OverTime',
         NO_OVERTIME: 'NoOverTime',
         BULLET_GRAPH: 'Bullet_Graph',
@@ -41,6 +42,8 @@ module.exports = function(app, app_sdk){
       }).then(response => {
           return response.json();
       }).then(body => {    
+        conv.data.fields = types.getFields(body.covid_canada.mappings.properties);
+        conv.contexts.set(AppContexts.PARAMS, 40, {fields: conv.data.fields});
         types.check_length_many(body.covid_canada.mappings.properties).then((res,err) => {
           if(res) {
             //Dialog to more than 1 set of values
@@ -169,5 +172,16 @@ module.exports = function(app, app_sdk){
           }
         });
       });
+    });
+
+    app.intent('HeatMap - value', conv => {
+      console.log(conv.parameters);
+      let json = {
+        resp: "Vale, voy a dibujarlo",
+        graph: "heatmap",
+        colname: [conv.parameters.col1,conv.parameters.col2],
+        parameters: conv.parameters
+      }
+      conv.ask(JSON.stringify(json));
     });
 }
