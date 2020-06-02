@@ -174,6 +174,36 @@ module.exports = function(app, app_sdk){
       });
     });
 
+    app.intent('Line Graph - fieldTime', conv => {
+      console.log(conv.parameters);
+      return fetch(elastic_url + 'covid_canada',{
+          method: 'GET',
+      }).then(response => {
+          return response.json();
+      }).then(body => {    
+        types.check_date_field(body.covid_canada.mappings.properties, conv.parameters.timeField).then((res,err) => {
+          if(res) {
+            console.log(conv.parameters);
+            let json = {
+              resp: "Vale, voy a dibujarlo",
+              graph: "line_graph",
+              colname: conv.parameters.any,
+              parameters: conv.parameters
+            }
+            conv.ask(JSON.stringify(json));
+          } else {
+            let json = {
+              resp: "No encuentro ese atributo de tiempo, si puedes volver a repetirmelo...",
+              graph: "line_graph",
+              colname: conv.parameters.any,
+              parameters: conv.parameters
+            }
+            conv.ask(JSON.stringify(json));
+          }
+        });
+      });
+    });
+
     app.intent('HeatMap - value', conv => {
       console.log(conv.parameters);
       let json = {
