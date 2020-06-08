@@ -214,4 +214,15 @@ module.exports = function(app, app_sdk){
       }
       conv.ask(JSON.stringify(json));
     });
+
+    app.intent('Variance Graph - group col', conv => {
+      console.log(conv.parameters);
+      let json = {
+        resp: "Vale, voy a dibujarlo",
+        graph: "variace_graph",
+        colname: [conv.parameters.col1,conv.parameters.col2],
+        parameters: conv.parameters
+      }
+      conv.ask(JSON.stringify(json));
+    });
 }
