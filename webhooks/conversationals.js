@@ -225,4 +225,16 @@ module.exports = function(app, app_sdk){
       }
       conv.ask(JSON.stringify(json));
     });
+
+    app.intent('Highlight Table - range', conv => {
+      console.log(conv.parameters);
+      conv.parameters.fields = conv.data.fields
+      let json = {
+        resp: "Vale, voy a dibujarlo",
+        graph: "highlight_table",
+        colname: conv.parameters.any,
+        parameters: conv.parameters
+      }
+      conv.ask(JSON.stringify(json));
+    });
 }
