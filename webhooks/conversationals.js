@@ -9,6 +9,7 @@ module.exports = function(app, app_sdk){
         OVERTIME: 'OverTime',
         NO_OVERTIME: 'NoOverTime',
         BULLET_GRAPH: 'Bullet_Graph',
+        MULTIPLE_SCATTER_PLOTS: 'multiple_scatter_plots',
         SCATTER_PLOT: 'Scatter_Plot'
       }
 
@@ -62,6 +63,7 @@ module.exports = function(app, app_sdk){
     app.intent('Decision Model - Relationship - Correlation - N Categories', conv => {
       if (conv.parameters.number > 2) {
         conv.ask("Estaría bien usar varios gráficos de dispersión.");
+        conv.contexts.set(AppContexts.MULTIPLE_SCATTER_PLOTS,5);
       } else {
         conv.ask("Estaría bien usar un gráfico de dispersión.");
         conv.contexts.set(AppContexts.SCATTER_PLOT,5);
@@ -236,5 +238,17 @@ module.exports = function(app, app_sdk){
         parameters: conv.parameters
       }
       conv.ask(JSON.stringify(json));
+    });
+
+    app.intent('Multiple Scatter Plots - attrs', conv => {
+      console.log(conv.parameters.any);
+      let json = {
+        resp: "Vale, voy a dibujarlo",
+        graph: "multiple_scatter_plots",
+        colname: conv.parameters.any,
+        parameters: conv.parameters
+      }
+      conv.ask(JSON.stringify(json));
+      
     });
 }
