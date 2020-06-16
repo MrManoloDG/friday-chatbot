@@ -22,6 +22,7 @@
   "homepage": "https://github.com/MrManoloDG/friday-chatbot#readme",
   "dependencies": {
     "actions-on-google": "^2.12.0",
+    "actions-on-google-dialogflow-session-entities-plugin": "^1.0.1",
     "body-parser": "^1.19.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",

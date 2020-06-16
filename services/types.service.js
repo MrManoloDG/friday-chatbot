@@ -42,3 +42,26 @@ exports.check_field = function(fields, field) {
         resolve((fields[field] !== undefined && fields[field] != null));
     });
 }
+
+exports.check_dataset = function(datasets, dataset){
+    return new Promise((resolve,reject) => {
+        resolve(datasets.includes(dataset));
+    })
+}
+
+exports.create_entities = function(title, entities) {
+    let res = {
+        name: title,
+        entities: [],
+        entityOverrideMode: 'ENTITY_OVERRIDE_MODE_OVERRIDE'
+    };
+
+    entities.map(e => {
+        res.entities.push({
+            value: e,
+            synonyms: [e]
+        });
+    });
+    console.log(res);
+    return res;
+}

@@ -13,23 +13,48 @@ module.exports = function(app, app_sdk){
         SCATTER_PLOT: 'Scatter_Plot'
       }
 
+    app.intent('Default Welcome Intent', conv => {
+      console.log('Default Welcome');
+      return fetch(elastic_url + '_cat/indices?format=json&pretty=true',{
+          method: 'GET',
+      }).then(response => {
+          return response.json();
+      }).then(body => {   
+        let datasets = [];
+        body.map(e => {
+          if(!(/\.\w*/.test(e.index))){
+            datasets.push(e.index);
+          }
+        });
+        console.log(datasets);
+        conv.data.datasets = datasets;
+        conv.sessionEntities.add(types.create_entities('Dataset', datasets));
+        conv.ask("¡Hola! Soy su asistente para ayudarle a encontrar las mejores visualizaciones para su KPI." + 
+        "Si necesitas ayuda solo tienes que pedírmelo, diciendome a que dataset quieres referirte. Los datasets que tiene actualmente son: " + datasets);
+        conv.sessionEntities.send();
+      });
+    });
+
     // This intent check the type date in the data for enable Overtime conversations
     // TODO: Check geo for geolocation conversation (the intent have to been enabled)
     app.intent('Decision Model - Relationship', conv => {
+        console.log(conv.sessionEntities.get('colnames'));
         console.log('Decision Model - Relationship');
-        return fetch(elastic_url + 'covid_canada',{
+        console.log(elastic_url + conv.parameters.dataset);
+        return fetch(elastic_url + conv.data.dataset,{
             method: 'GET',
         }).then(response => {
             return response.json();
-        }).then(body => {   
-          types.check_date(body.covid_canada.mappings.properties).then((res,err) => {
+        }).then(body => {
+          console.log(body);
+          types.check_date(body[conv.data.dataset].mappings.properties).then((res,err) => {
             console.log(res);
             if(res) {
                 conv.contexts.set(AppContexts.OVERTIME,5);
               } else {
                 conv.contexts.set(AppContexts.NO_OVERTIME,5);
               }
-              conv.ask('¿Que tipo de relación?');
+              conv.ask('¿Que tipo de relación? Las relaciones que actualmente conozco son: Desviación, Correlación, Distribución y Clasificación');
           });
           
         });
@@ -37,23 +62,26 @@ module.exports = function(app, app_sdk){
 
     // This intent check how many values have our dataset for end the conversation
     app.intent('Decision Model', conv => {
-      console.log("llegado");
-      return fetch(elastic_url + 'covid_canada',{
+      conv.data.dataset = conv.parameters.dataset;
+      return fetch(elastic_url + conv.parameters.dataset,{
           method: 'GET',
       }).then(response => {
           return response.json();
       }).then(body => {    
-        conv.data.fields = types.getFields(body.covid_canada.mappings.properties);
+        conv.data.fields = types.getFields(body[conv.parameters.dataset].mappings.properties);
+        console.log(conv.data.fields);
         conv.contexts.set(AppContexts.PARAMS, 40, {fields: conv.data.fields});
-        types.check_length_many(body.covid_canada.mappings.properties).then((res,err) => {
+        conv.sessionEntities.add(types.create_entities('colnames', conv.data.fields));
+        types.check_length_many(body[conv.parameters.dataset].mappings.properties).then((res,err) => {
           if(res) {
             //Dialog to more than 1 set of values
-            conv.ask("Claro,  ¿Cuál sería el propósito?");
+            conv.ask("Claro, ¿Cuál sería el propósito? ¿Echar un vistazo a los datos o ver qué relaciones tienen sus atributos?");
           } else {
             //Dialog to 1 set of value
             conv.contexts.set(AppContexts.BULLET_GRAPH,5);
             conv.ask("Veo que solo tienes un atributo, deberias de usar un grafico de bala");
           }
+          conv.sessionEntities.send();
         });
         
       });
@@ -75,6 +103,7 @@ module.exports = function(app, app_sdk){
     // HISTOGRAM
     app.intent('histogram - colname', conv => {
       console.log(conv.parameters.any);
+      conv.parameters['url']=conv.data.dataset;
       let json = {
         resp: "Vale, voy a dibujarlo",
         graph: "histogram",
@@ -86,6 +115,7 @@ module.exports = function(app, app_sdk){
 
     app.intent('frequency_polygon - colname', conv => {
       console.log(conv.parameters.any);
+      conv.parameters['url']=conv.data.dataset;
       let json = {
         resp: "Vale, voy a dibujarlo",
         graph: "frequency_polygon",
@@ -97,6 +127,7 @@ module.exports = function(app, app_sdk){
 
     app.intent('Bullet_Graph - colname - groupField', conv => {
       console.log(conv.parameters);
+      conv.parameters['url']=conv.data.dataset;
       let json = {
         resp: "Vale, voy a dibujarlo",
         graph: "bullet_graph",
@@ -108,6 +139,7 @@ module.exports = function(app, app_sdk){
 
     app.intent('Scatter_Plot - colnames', conv => {
       console.log(conv.parameters);
+      conv.parameters['url']=conv.data.dataset;
       let json = {
         resp: "Vale, voy a dibujarlo",
         graph: "scatter_plot",
@@ -118,12 +150,13 @@ module.exports = function(app, app_sdk){
     });
 
     app.intent('box_plot - TimeField', conv => {
-      return fetch(elastic_url + 'covid_canada',{
+      conv.parameters['url']=conv.data.dataset;
+      return fetch(elastic_url + conv.data.dataset,{
           method: 'GET',
       }).then(response => {
           return response.json();
       }).then(body => {    
-        types.check_date_field(body.covid_canada.mappings.properties, conv.parameters.timeField).then((res,err) => {
+        types.check_date_field(body[conv.data.dataset].mappings.properties, conv.parameters.timeField).then((res,err) => {
           if(res) {
             console.log(conv.parameters);
             let json = {
@@ -147,13 +180,14 @@ module.exports = function(app, app_sdk){
     });
 
     app.intent('Slope_Graph - timeField', conv => {
+      conv.parameters['url']=conv.data.dataset;
       console.log(conv.parameters);
-      return fetch(elastic_url + 'covid_canada',{
+      return fetch(elastic_url + conv.data.dataset,{
           method: 'GET',
       }).then(response => {
           return response.json();
       }).then(body => {    
-        types.check_date_field(body.covid_canada.mappings.properties, conv.parameters.timeField).then((res,err) => {
+        types.check_date_field(body[conv.data.dataset].mappings.properties, conv.parameters.timeField).then((res,err) => {
           if(res) {
             console.log(conv.parameters);
             let json = {
@@ -177,13 +211,14 @@ module.exports = function(app, app_sdk){
     });
 
     app.intent('Line Graph - fieldTime', conv => {
+      conv.parameters['url']=conv.data.dataset;
       console.log(conv.parameters);
-      return fetch(elastic_url + 'covid_canada',{
+      return fetch(elastic_url + conv.data.dataset,{
           method: 'GET',
       }).then(response => {
           return response.json();
       }).then(body => {    
-        types.check_date_field(body.covid_canada.mappings.properties, conv.parameters.timeField).then((res,err) => {
+        types.check_date_field(body[conv.data.dataset].mappings.properties, conv.parameters.timeField).then((res,err) => {
           if(res) {
             console.log(conv.parameters);
             let json = {
@@ -207,6 +242,7 @@ module.exports = function(app, app_sdk){
     });
 
     app.intent('HeatMap - value', conv => {
+      conv.parameters['url']=conv.data.dataset;
       console.log(conv.parameters);
       let json = {
         resp: "Vale, voy a dibujarlo",
@@ -218,6 +254,7 @@ module.exports = function(app, app_sdk){
     });
 
     app.intent('Variance Graph - group col', conv => {
+      conv.parameters['url']=conv.data.dataset;
       console.log(conv.parameters);
       let json = {
         resp: "Vale, voy a dibujarlo",
@@ -229,6 +266,7 @@ module.exports = function(app, app_sdk){
     });
 
     app.intent('Highlight Table - range', conv => {
+      conv.parameters['url']=conv.data.dataset;
       console.log(conv.parameters);
       conv.parameters.fields = conv.data.fields
       let json = {
@@ -241,6 +279,7 @@ module.exports = function(app, app_sdk){
     });
 
     app.intent('Multiple Scatter Plots - attrs', conv => {
+      conv.parameters['url']=conv.data.dataset;
       console.log(conv.parameters.any);
       let json = {
         resp: "Vale, voy a dibujarlo",

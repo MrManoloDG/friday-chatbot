@@ -7,6 +7,7 @@ const util = require('util');
 const request = require('request');
 const fetch = require('node-fetch');
 const request_prom = util.promisify(request);
+const { sessionEntitiesHelper } = require('actions-on-google-dialogflow-session-entities-plugin')
 const elastic_url = process.env.ELASTIC_URL || 'http://fridaywebhook.duckdns.org:9200/';
 const setConversationalIntents = require('./webhooks/conversationals');
 const {
@@ -18,7 +19,7 @@ const {
 const types = require('./services/types.service'); 
 
 // Create an app instance
-const app = dialogflow()
+const app = dialogflow().use(sessionEntitiesHelper());
 const app_sdk = actionssdk();
 
 setConversationalIntents(app, app_sdk);
