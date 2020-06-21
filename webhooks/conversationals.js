@@ -79,7 +79,7 @@ module.exports = function(app, app_sdk){
           } else {
             //Dialog to 1 set of value
             conv.contexts.set(AppContexts.BULLET_GRAPH,5);
-            conv.ask("Veo que solo tienes un atributo, deberias de usar un grafico de bala");
+            conv.ask("Veo que solo tienes un atributo, deberias usar un grafico de bala. Si me lo pides podría dibujarlo.");
           }
           conv.sessionEntities.send();
         });
@@ -90,10 +90,10 @@ module.exports = function(app, app_sdk){
     // This intent check how many values have our dataset for end the conversation
     app.intent('Decision Model - Relationship - Correlation - N Categories', conv => {
       if (conv.parameters.number > 2) {
-        conv.ask("Estaría bien usar varios gráficos de dispersión.");
+        conv.ask("Estaría bien usar varios gráficos de dispersión. Si me lo pides podría dibujarlo.");
         conv.contexts.set(AppContexts.MULTIPLE_SCATTER_PLOTS,5);
       } else {
-        conv.ask("Estaría bien usar un gráfico de dispersión.");
+        conv.ask("Estaría bien usar un gráfico de dispersión. Si me lo pides podría dibujarlo. ");
         conv.contexts.set(AppContexts.SCATTER_PLOT,5);
       }
     });
@@ -169,7 +169,7 @@ module.exports = function(app, app_sdk){
           } else {
             let json = {
               resp: "No encuentro ese atributo de tiempo, si puedes volver a repetirmelo...",
-              graph: "box_plot",
+              graph: "timeField_error",
               colname: conv.parameters.any,
               parameters: conv.parameters
             }
@@ -200,7 +200,7 @@ module.exports = function(app, app_sdk){
           } else {
             let json = {
               resp: "No encuentro ese atributo de tiempo, si puedes volver a repetirmelo...",
-              graph: "slope_graph",
+              graph: "timeField_error",
               colname: conv.parameters.any,
               parameters: conv.parameters
             }
@@ -231,7 +231,7 @@ module.exports = function(app, app_sdk){
           } else {
             let json = {
               resp: "No encuentro ese atributo de tiempo, si puedes volver a repetirmelo...",
-              graph: "line_graph",
+              graph: "timeField_error",
               colname: conv.parameters.any,
               parameters: conv.parameters
             }
