@@ -35,6 +35,28 @@ module.exports = function(app, app_sdk){
       });
     });
 
+    app.intent('Repeat Option Intent', conv => {
+      console.log('Repeat Option Intent');
+      return fetch(elastic_url + '_cat/indices?format=json&pretty=true',{
+          method: 'GET',
+      }).then(response => {
+          return response.json();
+      }).then(body => {   
+        let datasets = [];
+        body.map(e => {
+          if(!(/\.\w*/.test(e.index))){
+            datasets.push(e.index);
+          }
+        });
+        console.log(datasets);
+        conv.data.datasets = datasets;
+        conv.sessionEntities.add(types.create_entities('Dataset', datasets));
+        conv.ask("Vale, aquí vamos otra vez. Me podrias decir a que dataset quieres referirte. " + 
+        "Los datasets que tiene actualmente son: " + datasets);
+        conv.sessionEntities.send();
+      });
+    });
+
     // This intent check the type date in the data for enable Overtime conversations
     // TODO: Check geo for geolocation conversation (the intent have to been enabled)
     app.intent('Decision Model - Relationship', conv => {
