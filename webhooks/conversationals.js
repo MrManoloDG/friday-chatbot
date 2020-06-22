@@ -105,48 +105,48 @@ module.exports = function(app, app_sdk){
       console.log(conv.parameters.any);
       conv.parameters['url']=conv.data.dataset;
       let json = {
-        resp: "Vale, voy a dibujarlo",
+        resp: "Vale, voy a dibujarlo. Si quieres otra visualización solo me tienes que decir que repita el proceso. ",
         graph: "histogram",
         colname: conv.parameters.any,
         parameters: conv.parameters
       }
-      conv.ask(JSON.stringify(json));
+      conv.close(JSON.stringify(json));
     });
 
     app.intent('frequency_polygon - colname', conv => {
       console.log(conv.parameters.any);
       conv.parameters['url']=conv.data.dataset;
       let json = {
-        resp: "Vale, voy a dibujarlo",
+        resp: "Vale, voy a dibujarlo. Si quieres otra visualización solo me tienes que decir que repita el proceso. ",
         graph: "frequency_polygon",
         colname: conv.parameters.any,
         parameters: conv.parameters
       }
-      conv.ask(JSON.stringify(json));
+      conv.close(JSON.stringify(json));
     });
 
     app.intent('Bullet_Graph - colname - groupField', conv => {
       console.log(conv.parameters);
       conv.parameters['url']=conv.data.dataset;
       let json = {
-        resp: "Vale, voy a dibujarlo",
+        resp: "Vale, voy a dibujarlo. Si quieres otra visualización solo me tienes que decir que repita el proceso. ",
         graph: "bullet_graph",
         colname: conv.parameters.any,
         parameters: conv.parameters
       }
-      conv.ask(JSON.stringify(json));
+      conv.close(JSON.stringify(json));
     });
 
     app.intent('Scatter_Plot - colnames', conv => {
       console.log(conv.parameters);
       conv.parameters['url']=conv.data.dataset;
       let json = {
-        resp: "Vale, voy a dibujarlo",
+        resp: "Vale, voy a dibujarlo. Si quieres otra visualización solo me tienes que decir que repita el proceso. ",
         graph: "scatter_plot",
         colname: [conv.parameters.att1,conv.parameters.att2],
         parameters: conv.parameters
       }
-      conv.ask(JSON.stringify(json));
+      conv.close(JSON.stringify(json));
     });
 
     app.intent('box_plot - TimeField', conv => {
@@ -160,12 +160,12 @@ module.exports = function(app, app_sdk){
           if(res) {
             console.log(conv.parameters);
             let json = {
-              resp: "Vale, voy a dibujarlo",
+              resp: "Vale, voy a dibujarlo. Si quieres otra visualización solo me tienes que decir que repita el proceso. ",
               graph: "box_plot",
               colname: conv.parameters.any,
               parameters: conv.parameters
             }
-            conv.ask(JSON.stringify(json));
+            conv.close(JSON.stringify(json));
           } else {
             let json = {
               resp: "No encuentro ese atributo de tiempo, si puedes volver a repetirmelo...",
@@ -191,12 +191,12 @@ module.exports = function(app, app_sdk){
           if(res) {
             console.log(conv.parameters);
             let json = {
-              resp: "Vale, voy a dibujarlo",
+              resp: "Vale, voy a dibujarlo. Si quieres otra visualización solo me tienes que decir que repita el proceso. ",
               graph: "slope_graph",
               colname: conv.parameters.any,
               parameters: conv.parameters
             }
-            conv.ask(JSON.stringify(json));
+            conv.close(JSON.stringify(json));
           } else {
             let json = {
               resp: "No encuentro ese atributo de tiempo, si puedes volver a repetirmelo...",
@@ -222,12 +222,12 @@ module.exports = function(app, app_sdk){
           if(res) {
             console.log(conv.parameters);
             let json = {
-              resp: "Vale, voy a dibujarlo",
+              resp: "Vale, voy a dibujarlo. Si quieres otra visualización solo me tienes que decir que repita el proceso. ",
               graph: "line_graph",
               colname: conv.parameters.any,
               parameters: conv.parameters
             }
-            conv.ask(JSON.stringify(json));
+            conv.close(JSON.stringify(json));
           } else {
             let json = {
               resp: "No encuentro ese atributo de tiempo, si puedes volver a repetirmelo...",
@@ -245,24 +245,24 @@ module.exports = function(app, app_sdk){
       conv.parameters['url']=conv.data.dataset;
       console.log(conv.parameters);
       let json = {
-        resp: "Vale, voy a dibujarlo",
+        resp: "Vale, voy a dibujarlo. Si quieres otra visualización solo me tienes que decir que repita el proceso. ",
         graph: "heatmap",
         colname: [conv.parameters.col1,conv.parameters.col2],
         parameters: conv.parameters
       }
-      conv.ask(JSON.stringify(json));
+      conv.close(JSON.stringify(json));
     });
 
     app.intent('Variance Graph - group col', conv => {
       conv.parameters['url']=conv.data.dataset;
       console.log(conv.parameters);
       let json = {
-        resp: "Vale, voy a dibujarlo",
+        resp: "Vale, voy a dibujarlo. Si quieres otra visualización solo me tienes que decir que repita el proceso. ",
         graph: "variace_graph",
         colname: [conv.parameters.col1,conv.parameters.col2],
         parameters: conv.parameters
       }
-      conv.ask(JSON.stringify(json));
+      conv.close(JSON.stringify(json));
     });
 
     app.intent('Highlight Table - range', conv => {
@@ -270,24 +270,24 @@ module.exports = function(app, app_sdk){
       console.log(conv.parameters);
       conv.parameters.fields = conv.data.fields
       let json = {
-        resp: "Vale, voy a dibujarlo",
+        resp: "Vale, voy a dibujarlo. Si quieres otra visualización solo me tienes que decir que repita el proceso. ",
         graph: "highlight_table",
         colname: conv.parameters.any,
         parameters: conv.parameters
       }
-      conv.ask(JSON.stringify(json));
+      conv.close(JSON.stringify(json));
     });
 
     app.intent('Multiple Scatter Plots - attrs', conv => {
       conv.parameters['url']=conv.data.dataset;
       console.log(conv.parameters.any);
       let json = {
-        resp: "Vale, voy a dibujarlo",
+        resp: "Vale, voy a dibujarlo. Si quieres otra visualización solo me tienes que decir que repita el proceso. ",
         graph: "multiple_scatter_plots",
         colname: conv.parameters.any,
         parameters: conv.parameters
       }
-      conv.ask(JSON.stringify(json));
+      conv.close(JSON.stringify(json));
       
     });
 }
