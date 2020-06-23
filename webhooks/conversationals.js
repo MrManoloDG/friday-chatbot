@@ -10,7 +10,10 @@ module.exports = function(app, app_sdk){
         NO_OVERTIME: 'NoOverTime',
         BULLET_GRAPH: 'Bullet_Graph',
         MULTIPLE_SCATTER_PLOTS: 'multiple_scatter_plots',
-        SCATTER_PLOT: 'Scatter_Plot'
+        SCATTER_PLOT: 'Scatter_Plot',
+        TABLE: 'Highlight_table',
+        LINE_GRAPH: 'Line_Graph'
+
       }
 
     app.intent('Default Welcome Intent', conv => {
@@ -29,7 +32,7 @@ module.exports = function(app, app_sdk){
         console.log(datasets);
         conv.data.datasets = datasets;
         conv.sessionEntities.add(types.create_entities('Dataset', datasets));
-        conv.ask("¡Hola! Soy su asistente para ayudarle a encontrar las mejores visualizaciones para su KPI." + 
+        conv.ask("¡Hola! Soy su asistente para ayudarle a encontrar las mejores visualizaciones para su KPI. " + 
         "Si necesitas ayuda solo tienes que pedírmelo, diciendome a que dataset quieres referirte. Los datasets que tiene actualmente son: " + datasets);
         conv.sessionEntities.send();
       });
@@ -48,10 +51,9 @@ module.exports = function(app, app_sdk){
             datasets.push(e.index);
           }
         });
-        console.log(datasets);
         conv.data.datasets = datasets;
         conv.sessionEntities.add(types.create_entities('Dataset', datasets));
-        conv.ask("Vale, aquí vamos otra vez. Me podrias decir a que dataset quieres referirte. " + 
+        conv.ask("Vale, aquí vamos otra vez. Me podrias decir a qué dataset quieres referirte. " + 
         "Los datasets que tiene actualmente son: " + datasets);
         conv.sessionEntities.send();
       });
@@ -92,7 +94,7 @@ module.exports = function(app, app_sdk){
       }).then(body => {    
         conv.data.fields = types.getFields(body[conv.parameters.dataset].mappings.properties);
         console.log(conv.data.fields);
-        conv.contexts.set(AppContexts.PARAMS, 40, {fields: conv.data.fields});
+        conv.contexts.set(AppContexts.PARAMS, 60, {fields: conv.data.fields});
         conv.sessionEntities.add(types.create_entities('colnames', conv.data.fields));
         types.check_length_many(body[conv.parameters.dataset].mappings.properties).then((res,err) => {
           if(res) {
