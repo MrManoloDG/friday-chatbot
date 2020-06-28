@@ -9,6 +9,7 @@ services:
       - http.cors.allow-origin=*
       - http.cors.allow-headers=X-Requested-With,X-Auth-Token,Content-Type,Content-Length,Authorization
       - http.cors.allow-credentials=true
+      - ELASTIC_PASSWORD=${PASSWORD}
     ulimits:
       memlock:
         soft: -1
