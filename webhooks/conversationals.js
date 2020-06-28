@@ -1,6 +1,6 @@
 
 const fetch = require('node-fetch');
-const elastic_url = process.env.ELASTIC_URL || 'http://fridaywebhook.duckdns.org:9200/';
+const elastic_url = process.env.ELASTIC_URL || 'http://fridaywebhook.duckdns.org:9255/';
 
 module.exports = function(app, app_sdk){
     const types = require('../services/types.service'); 

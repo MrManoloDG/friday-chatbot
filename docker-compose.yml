@@ -17,13 +17,13 @@ services:
     volumes:
       - data:/usr/share/elasticsearch/data
     ports:
-      - 9200:9200
-      - 9300:9300
+      - 9255:9200
+      - 9355:9300
 
   kibana:
     image: docker.elastic.co/kibana/kibana:7.6.1
     ports: 
-      - 5601:5601
+      - 5620:5601
   
   friday-front:
     image: mrmanolodg/friday-chatbot-front:latest
